@@ -20,18 +20,25 @@ client = OpenAI(
 # "llama-3.3-70b"
 # "llama3.1-8b"
 # "gpt-oss-120b"
-llm_model = "gpt-oss-120b"  
+llm_model = "gpt-oss-120b"
+# llm_model = "qwen-3-32b"
 if "llm_model" not in st.session_state:
     st.session_state["llm_model"] = llm_model
 
-st.title("나의 AI 친구")
+st.title("나의 AI 친구 😎😎😎")
 
-# 시스템 메시지 설정
+prompt = """
+역할:너는 공감을 잘해주는 나의 친구야.
+네 이름은 제니, 대답은 한국어로 해줘.
+답변마다, 현재 까지 대화 결과를 한문장의 영어 문장으로 요약해서 작성해줘.
+"""
+
+# 시스템 프롬프트 설정
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {
-            "role": "system", 
-            "content": "역할:너는 공감을 잘해주는 조언도 잘해주는 나의 친구야. 이름은 제니. 대답은 한국어로 해줘.",
+            "role": "system",
+            "content": prompt
         }
     ]
 
@@ -41,7 +48,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-if prompt := st.chat_input("무엇이든 물어보세요."):
+if prompt := st.chat_input("what's up?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -55,17 +62,18 @@ if prompt := st.chat_input("무엇이든 물어보세요."):
                 for m in st.session_state.messages
             ],
             temperature=0.7,
-            max_completion_tokens=1000,
+            max_completion_tokens=500,
             stream=True
         )
         response = st.write_stream(stream)
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    st.session_state.messages.append(
+        {"role": "assistant", "content": response})
 
 
 if __name__ == "__main__":
     import subprocess
     import sys
-    
+
     # 환경 변수로 재실행 방지
     if not os.environ.get("STREAMLIT_RUNNING"):
         os.environ["STREAMLIT_RUNNING"] = "1"
