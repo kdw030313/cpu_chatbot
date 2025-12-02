@@ -24,7 +24,7 @@ llm_model = "gpt-oss-120b"
 if "llm_model" not in st.session_state:
     st.session_state["llm_model"] = llm_model
 
-st.title("나의 AI 친구")
+st.title("나의 채팅 친구")
 
 prompt = """
 너는 나의 오랜 친구야. 편하게 대화하면서도 진심 어린 조언을 해주는 친구.
